@@ -6,6 +6,8 @@ Subscribe at:
 
 https://lomzem.github.io/chronatello/calendar.ics
 
+Original source: https://data385.netlify.app/schedule
+
 ## How it works
 
 1. A synchronous Rust program fetches the semantic Quarto schedule table.
