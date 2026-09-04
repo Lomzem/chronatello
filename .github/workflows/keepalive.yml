@@ -1,0 +1,37 @@
+name: Keep scheduled workflows active
+
+on:
+  schedule:
+    - cron: "43 9 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: false
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Record monthly activity
+        run: |
+          set -euo pipefail
+          month=$(date -u +%Y-%m)
+          case "$month" in
+            2026-08|2026-09|2026-10|2026-11|2026-12) ;;
+            *) echo "Outside the Fall 2026 term; no keepalive needed."; exit 0 ;;
+          esac
+          if test -f .github/keepalive && grep -Fxq "$month" .github/keepalive; then
+            echo "Keepalive already recorded for $month."
+            exit 0
+          fi
+          printf '%s\n' "$month" > .github/keepalive
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/keepalive
+          git commit -m "chore: refresh workflow keepalive"
+          git push
