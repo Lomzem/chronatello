@@ -4,9 +4,7 @@ Chronatello converts the public DATA 385 Fall 2026 schedule into an automaticall
 
 Subscribe at:
 
-```text
 https://lomzem.github.io/chronatello/calendar.ics
-```
 
 ## How it works
 
